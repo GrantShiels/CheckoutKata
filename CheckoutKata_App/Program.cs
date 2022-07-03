@@ -1,5 +1,6 @@
 ﻿
 using System;
+using static System.Environment;
 using CheckoutKata_App.Models;
 
 namespace KataConsole
@@ -25,13 +26,70 @@ namespace KataConsole
                 new ShopPromotion('D', 2, 27.50M, "25% off for every 2 purchased together")
             );
 
-            if (currentShop.ShopItems.Count != 0)
+            //Display all of the items the user can buy
+            displayItems(currentShop.ShopItems, currentShop.ShopPromotions);
+
+            int userInput = 1;
+
+            while (userInput != 0)
+            {
+                userInput = getUserInput();
+
+                switch (userInput)
+                {
+                    case 1:
+                        Console.WriteLine(
+                               "You chose (1), these are the items available to purchase: " + NewLine
+                           );
+                        displayItems(currentShop.ShopItems, currentShop.ShopPromotions);
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input, try again!");
+                        break;
+
+                }
+            }
+
+
+
+
+
+
+
+
+        }
+
+        //Used to fetch the user input from the console
+        static public int getUserInput()
+        {
+            
+
+                int currentChoice = 0;
+                Console.WriteLine(NewLine);
+                Console.WriteLine(
+                    "Press (0) to exit, (1) to view shop items"
+                );
+
+                currentChoice = int.Parse(Console.ReadLine());
+                return currentChoice;
+
+         
+
+        }
+
+        //Used to display a list of Shop items and their promotions
+        static public void displayItems(
+            List<ShopItem> shopItems,
+            List<ShopPromotion> shopPromotions
+        )
+        {
+            if (shopItems.Count != 0)
             {
                 //Display all the available items to the user
-                foreach (var i in currentShop.ShopItems)
+                foreach (var i in shopItems)
                 {
                     //Search the promotions list for the item SKU
-                    var foundPromotion = currentShop.ShopPromotions.FirstOrDefault(p => p.ItemSKU == i.ItemSKU);
+                    var foundPromotion = shopPromotions.FirstOrDefault(p => p.ItemSKU == i.ItemSKU);
 
                     //if a promotion was found display the promotion text
                     if (foundPromotion != null)
@@ -59,14 +117,6 @@ namespace KataConsole
                 Console.WriteLine("No Items found.");
             }
 
-
-
-
-
-
-
         }
-
-
     }
 }
