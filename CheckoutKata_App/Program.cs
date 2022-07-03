@@ -2,7 +2,7 @@
 using static System.Environment;
 using CheckoutKata_App.Models;
 
-namespace KataConsole
+namespace CheckoutKata_App
 {
     public class Program
     {
@@ -35,9 +35,57 @@ namespace KataConsole
                 switch (userInput)
                 {
                     case 1:
-                        Console.WriteLine(
-                            "You chose (1), Please add an item to your basket " + NewLine
+                        char toAddSKU;
+                        int toAddQuantity;
+
+                        //Get user input and verify that it is valid
+                        try
+                        {
+                            Console.WriteLine(
+                                "You chose (1), please enter the SKU of the item you want to add to your basket: "
+                            );
+
+                            toAddSKU = char.Parse(Console.ReadLine());
+
+                            Console.WriteLine(
+                                "Please enter the quantity of the item you want to add to your basket: "
+                            );
+
+                            toAddQuantity = int.Parse(Console.ReadLine());
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Invalid input, please try again");
+                            break;
+                        }
+
+                        //Search for the user input SKU in the available items
+                        var foundItem = currentShop.ShopItems.FirstOrDefault(
+                            i => i.ItemSKU == toAddSKU
                         );
+
+                        //if an item was found add it to the basket.
+                        if (foundItem != null)
+                        {
+                            //loop through the quantity of items to add
+                            for (int i = 0; i < toAddQuantity; i++)
+                            {
+                                //add the item to the basket
+                                currentShop.UserBasket.Add(foundItem);
+                            }
+
+                            Console.WriteLine(NewLine);
+                            Console.WriteLine("User Basket: ");
+                            //after being added print the users basket and total
+                            displayItems(currentShop.UserBasket, currentShop.ShopPromotions);
+                            Console.WriteLine("Total : " + currentShop.CalculateTotal());
+                            Console.WriteLine(NewLine);
+                        }
+                        //if not found inform the user
+                        else
+                        {
+                            Console.WriteLine("There was no item found with the SKU : " + toAddSKU);
+                        }
 
                         break;
                     //Display items in the basket
