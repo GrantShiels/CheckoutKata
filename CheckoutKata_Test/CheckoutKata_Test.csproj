@@ -21,4 +21,7 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CheckoutKata_App\CheckoutKata_App.csproj" />
+  </ItemGroup>
 </Project>
