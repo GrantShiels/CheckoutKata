@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using static System.Environment;
 using CheckoutKata_App.Models;
 
@@ -7,10 +6,8 @@ namespace KataConsole
 {
     public class Program
     {
-
         static void Main(string[] args)
         {
-
             //Create a new Shop item on start
             Shop currentShop = new Shop();
 
@@ -39,42 +36,50 @@ namespace KataConsole
                 {
                     case 1:
                         Console.WriteLine(
-                               "You chose (1), these are the items available to purchase: " + NewLine
-                           );
+                            "You chose (1), Please add an item to your basket " + NewLine
+                        );
+
+                        break;
+                    //Display items in the basket
+                    case 2:
+                        Console.WriteLine(
+                            "You chose (2), theses are the items in your basket: " + NewLine
+                        );
+                        displayItems(currentShop.UserBasket, currentShop.ShopPromotions);
+                        Console.WriteLine(NewLine);
+                        break;
+                    //Display the items that are available to purchase
+                    case 3:
+                        Console.WriteLine(
+                            "You chose (3), these are the items available to purchase: " + NewLine
+                        );
                         displayItems(currentShop.ShopItems, currentShop.ShopPromotions);
                         break;
                     default:
                         Console.WriteLine("Invalid input, try again!");
                         break;
-
                 }
             }
-
-
-
-
-
-
-
-
         }
 
         //Used to fetch the user input from the console
         static public int getUserInput()
         {
-            
-
+            try
+            {
                 int currentChoice = 0;
                 Console.WriteLine(NewLine);
                 Console.WriteLine(
-                    "Press (0) to exit, (1) to view shop items"
+                    "Press (0) to exit, (1) to add an item to your basket, (2) to view your basket and total, (3) to view the items available for purchase"
                 );
 
                 currentChoice = int.Parse(Console.ReadLine());
                 return currentChoice;
-
-         
-
+            }
+            catch
+            {
+                return 4;
+            }
         }
 
         //Used to display a list of Shop items and their promotions
@@ -116,7 +121,6 @@ namespace KataConsole
             {
                 Console.WriteLine("No Items found.");
             }
-
         }
     }
 }
