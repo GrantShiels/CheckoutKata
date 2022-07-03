@@ -18,7 +18,7 @@ namespace CheckoutKata_App.Models
         public decimal CalculateTotal()
         {
             decimal basketTotal = 0;
-
+            decimal basketSaving = 0;
 
             //loop through the users basket
             foreach (var product in UserBasket)
@@ -27,13 +27,31 @@ namespace CheckoutKata_App.Models
             }
 
 
+            //loop through the promotions
+            foreach (var promotion in ShopPromotions)
+            {
+                basketSaving += CalculateSaving(promotion, UserBasket);
+            }
 
-            //Return the basket total
-            return basketTotal;
+
+
+            //Return the basket total with the discount removed
+            return basketTotal - basketSaving;
         }
 
-        //TODO add the ability to calculate the toal with the promotions in mind
+        //Used to calculate the total saving for one promotion
+        private decimal CalculateSaving(ShopPromotion promotion, List<ShopItem> basket)
+        {
+            int numOfItems = 0;
+            decimal saving = 0;
 
+            //Find the number of items in the basket that fit in the current promotion
+            numOfItems = basket.Count(item => item.ItemSKU == promotion.ItemSKU);
+            //Calculate the saving based of num of items / how many needed for the promotion. Then * saving amount
+            saving = (numOfItems / promotion.ItemCount) * promotion.PriceSaving;
+
+            return saving;
+        }
     }
 }
 
