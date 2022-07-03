@@ -19,16 +19,48 @@ namespace KataConsole
             currentShop.ShopItems.Add(new ShopItem('C', 40));
             currentShop.ShopItems.Add(new ShopItem('D', 55));
 
-            //display all the items to the user
-            foreach(var i in currentShop.ShopItems)
+            //create the default shop promotions
+            currentShop.ShopPromotions.Add(new ShopPromotion('B', 3, 5, "3 for 0"));
+            currentShop.ShopPromotions.Add(
+                new ShopPromotion('D', 2, 27.50M, "25% off for every 2 purchased together")
+            );
+
+            if (currentShop.ShopItems.Count != 0)
             {
-                Console.WriteLine(
-                           "Item SKU: "
-                               + i.ItemSKU
-                               + " | Unit Price: "
-                               + i.UnitPrice
-                       );
+                //Display all the available items to the user
+                foreach (var i in currentShop.ShopItems)
+                {
+                    //Search the promotions list for the item SKU
+                    var foundPromotion = currentShop.ShopPromotions.FirstOrDefault(p => p.ItemSKU == i.ItemSKU);
+
+                    //if a promotion was found display the promotion text
+                    if (foundPromotion != null)
+                    {
+                        Console.WriteLine(
+                            "Item SKU: "
+                                + i.ItemSKU
+                                + " | Unit Price: "
+                                + i.UnitPrice
+                                + " | Promotion: "
+                                + foundPromotion.PromotionText
+                        );
+                    }
+                    //If no promotion was found just display item info
+                    else
+                    {
+                        Console.WriteLine(
+                            "Item SKU: " + i.ItemSKU + " | Unit Price: " + i.UnitPrice + " |"
+                        );
+                    }
+                }
             }
+            else
+            {
+                Console.WriteLine("No Items found.");
+            }
+
+
+
 
 
 
