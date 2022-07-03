@@ -4,11 +4,9 @@ namespace CheckoutKata_Test;
 
 public class CheckoutKataTests
 {
-    private Shop testShop = new Shop();
-
-    internal void KataConsoleTests()
+    private Shop createTestShop()
     {
-
+        Shop testShop = new Shop();
         List<ShopItem> testShopItems = new List<ShopItem>();
         List<ShopPromotion> testShopPromotions = new List<ShopPromotion>();
 
@@ -27,9 +25,46 @@ public class CheckoutKataTests
         testShop.ShopItems = testShopItems;
         testShop.ShopPromotions = testShopPromotions;
         testShop.UserBasket = new List<ShopItem>();
+
+        return testShop;
     }
 
 
+
+
+
+    //Used to test if the total will be 0 if no items are present
+    [Fact]
+    public void Empty_basket_returns_zero_total()
+    {
+        Shop newTestShop = createTestShop();
+        Assert.Equal(0, newTestShop.CalculateTotal());
+    }
+
+
+
+
+    //Used to test the calculated price of a single item
+    [Theory]
+    [InlineData('A', 10)]
+    [InlineData('B', 15)]
+    [InlineData('C', 40)]
+    [InlineData('D', 55)]
+    public void Single_item_basket_check_price(char toTestSKU, int expectedValue)
+    {
+
+        Shop newTestShop = createTestShop();
+
+        //get the item from the shop items
+        var testItem = newTestShop.ShopItems.FirstOrDefault(i => i.ItemSKU == toTestSKU);
+
+        if (testItem != null)
+        {
+            newTestShop.UserBasket.Add(testItem);
+        }      
+
+        Assert.Equal(expectedValue, newTestShop.CalculateTotal());
+    }
 
 
 
