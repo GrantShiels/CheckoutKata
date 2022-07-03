@@ -4,6 +4,7 @@ namespace CheckoutKata_Test;
 
 public class CheckoutKataTests
 {
+    //Used to create  default shop that mimics the one from the word document
     private Shop createTestShop()
     {
         Shop testShop = new Shop();
@@ -30,9 +31,6 @@ public class CheckoutKataTests
     }
 
 
-
-
-
     //Used to test if the total will be 0 if no items are present
     [Fact]
     public void Empty_basket_returns_zero_total()
@@ -40,8 +38,6 @@ public class CheckoutKataTests
         Shop newTestShop = createTestShop();
         Assert.Equal(0, newTestShop.CalculateTotal());
     }
-
-
 
 
     //Used to test the calculated price of a single item
@@ -67,6 +63,33 @@ public class CheckoutKataTests
     }
 
 
+    [Theory]
+    [InlineData("BBB", 40)]
+    [InlineData("BBBBBBB", 95)]
+    [InlineData("DD", 82.5)]
+    [InlineData("DDDDD", 220)]
+    public void Promotion_item_basket_check_price(string toTestSKUs, decimal expectedValue)
+    {
+
+        Shop newTestShop = createTestShop();
+        char[] splitSKUs = toTestSKUs.ToCharArray();
+
+        foreach(var s in splitSKUs)
+        {
+            //get the item from the shop items
+            var testItem = newTestShop.ShopItems.FirstOrDefault(i => i.ItemSKU == s);
+
+            if (testItem != null)
+            {
+                newTestShop.UserBasket.Add(testItem);
+            }
+
+        }
+     
+
+        Assert.Equal(expectedValue, newTestShop.CalculateTotal());
+
+    }
 
 
 }
