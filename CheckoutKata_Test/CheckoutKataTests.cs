@@ -68,6 +68,9 @@ public class CheckoutKataTests
     [InlineData("BBBBBBB", 95)]
     [InlineData("DD", 82.5)]
     [InlineData("DDDDD", 220)]
+    [InlineData("DDBBB", 122.5)]
+    [InlineData("BBBAC", 90)]
+    [InlineData("DDACDDBBB", 255)]
     public void Promotion_item_basket_check_price(string toTestSKUs, decimal expectedValue)
     {
 
@@ -90,6 +93,36 @@ public class CheckoutKataTests
         Assert.Equal(expectedValue, newTestShop.CalculateTotal());
 
     }
+
+    [Theory]
+    [InlineData("AAA", 30)]
+    [InlineData("BB", 30)]
+    [InlineData("CCAB", 105)]
+    [InlineData("BBD", 85)]
+    [InlineData("AAABBCCCD", 235)]
+    public void No_promotion_item_basket_check_price(string toTestSKUs, decimal expectedValue)
+    {
+
+        Shop newTestShop = createTestShop();
+        char[] splitSKUs = toTestSKUs.ToCharArray();
+
+        foreach (var s in splitSKUs)
+        {
+            //get the item from the shop items
+            var testItem = newTestShop.ShopItems.FirstOrDefault(i => i.ItemSKU == s);
+
+            if (testItem != null)
+            {
+                newTestShop.UserBasket.Add(testItem);
+            }
+
+        }
+
+
+        Assert.Equal(expectedValue, newTestShop.CalculateTotal());
+
+    }
+
 
 
 }
